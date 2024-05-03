@@ -128,6 +128,6 @@ def choose_bank():
     builder.button(text="Тинькофф", callback_data='bank:tin')
     builder.button(text='Сбербанк', callback_data='bank:sber')
     builder.row(InlineKeyboardButton(text='ВСЕ', callback_data='bank:all'))
-    builder.row(InlineKeyboardButton(text='Назад 👈'))
+    builder.row(InlineKeyboardButton(text='Назад 👈', callback_data='cards'))
 
     return builder.as_markup()
