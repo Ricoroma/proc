@@ -57,7 +57,7 @@ class Requisite(Base):
     id = Column(Integer(), primary_key=True)
     bank = Column(String())
     value = Column(String())
-    user_id = Column(Integer, ForeignKey(User.id))
+    user_id = Column(Integer, ForeignKey(Trader.id))
 
 
 def create_db():
