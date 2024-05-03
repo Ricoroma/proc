@@ -37,7 +37,7 @@ class Trader(Base):
     __tablename__ = 'traders'
     user_id = Column(Integer(), primary_key=True)
     balance = Column(Float(), default=0)
-    requisites = Column(String(), default='')
+    requisites = relationship('Requisite')
     trades = relationship(Trade, back_populates='trader')
     wallet = Column(String(), default='')
     is_active = Column(Integer(), default=1)
@@ -57,7 +57,7 @@ class Requisite(Base):
     id = Column(Integer(), primary_key=True)
     bank = Column(String())
     value = Column(String())
-    user_id = Column(Integer, ForeignKey(Trader.id))
+    user_id = Column(Integer, ForeignKey(Trader.user_id))
 
 
 def create_db():
