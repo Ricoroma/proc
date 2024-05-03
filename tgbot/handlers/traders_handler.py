@@ -160,7 +160,7 @@ async def start_add_cart_handler(call: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data.startswith('bank:'))
-async def choose_bank(call: CallbackQuery, state: FSMContext):
+async def choose_bank_handler(call: CallbackQuery, state: FSMContext):
     bank = call.data.split(':')[1]
     if bank == 'all':
         await call.answer('Пока пусто')
