@@ -1,0 +1,6 @@
+*.db
+migrations/versions/*
+.idea/
+/test.py
+*.session
+tgbot/data/settings.ini
