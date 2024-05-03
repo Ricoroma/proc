@@ -44,8 +44,7 @@ def choose_trader_kb(traders: list[int]):
     for trader in traders:
         builder.button(text=f'Трейдер {trader}', callback_data=f'trader:{trader}')
 
-    if not traders:
-        builder.button(text='Выпустить ссылку', callback_data='create_link')
+    builder.button(text='Выпустить ссылку', callback_data='create_link')
 
     builder.button(text='🔙 Назад', callback_data='main_admin')
 

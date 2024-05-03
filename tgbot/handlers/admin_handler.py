@@ -55,7 +55,7 @@ async def admin_trader_handler(call: CallbackQuery, db_session: Session, state: 
     trader_id = int(call.data.split(':')[1])
     trader: Trader = db_session.query(Trader).get(trader_id)
     text = f'Трейдер {trader_id}\n' \
-           f'Баланс: {trader.balance} BTC\n' \
+           f'Баланс:\n├{trader.balance}₿\n└ {round(get_course() * trader.balance, 2)}\n\n' \
            f'Кошелек: {trader.wallet or "Некоторый кошелек"}\n' \
            f'Привязанный аккаунт: {trader.account_id or "Не привязан"}\n'
 
@@ -159,10 +159,6 @@ async def admin_trader_change_balance_handler(message: Message, state: FSMContex
 
 @router.callback_query(F.data == 'create_link')
 async def create_link_handler(call: CallbackQuery, db_session: Session):
-    if db_session.query(Trader).first():
-        await call.answer('Достигнуто максимальное количество трейдеров')
-        return
-
     code = randint(10 ** 7, 10 ** 8)
     links.append(code)
     traders = [i.user_id for i in db_session.query(Trader).all()]
