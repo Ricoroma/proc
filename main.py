@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 import sys
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -7,10 +8,12 @@ from datetime import datetime
 from aiogram import Dispatcher
 from aiogram.types import Update
 from fastapi import FastAPI, Request, Depends
+from pyrogram import Client, filters, idle, types
+from pyrogram.types import Message
 
 from tgbot.data.config import webhook_url
 from tgbot.data.loader import bot, storage, Session
-from tgbot.handlers import traders_handler, admin_handler
+from tgbot.handlers import traders_handler, admin_handler, forward_handler
 from tgbot.middlewares.database_middleware import DatabaseMiddleware
 import tgbot.handlers.main_menu as main_menu
 import platform
@@ -24,10 +27,41 @@ if platform.system() == 'Windows':
 dp = Dispatcher(storage=storage)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
+api_id = 27378538
+api_hash = '99ebeab789ef9c139fe233b32f436abb'
+client = Client('s1', api_id, api_hash)
+
+
+@client.on_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
+async def f(c: Client, m: Message):
+    if m.reply_markup:
+        if isinstance(m.reply_markup, types.InlineKeyboardMarkup):
+            keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
+            await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
+            return
+        await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
+        return
+
+    await bot.send_message(c.me.id, m.text)
+
+
+@client.on_edited_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
+async def f(c, m: Message):
+    if m.reply_markup:
+        if isinstance(m.reply_markup, types.InlineKeyboardMarkup):
+            keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
+            await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
+            return
+        await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
+        return
+
+    await bot.send_message(c.me.id, m.text)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logging.info('start')
+    dp.include_router(forward_handler.router)
     dp.include_router(main_menu.router)
     dp.include_router(admin_handler.router)
     dp.include_router(traders_handler.router)
@@ -35,8 +69,13 @@ async def lifespan(app: FastAPI):
     dp.update.middleware(DatabaseMiddleware())
 
     await bot.set_webhook(webhook_url)
+    await client.start()
 
     yield
+
+    await idle()
+
+    await client.stop()
 
     await bot.delete_webhook(drop_pending_updates=True)
 
