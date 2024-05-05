@@ -14,6 +14,7 @@ from pyrogram.types import Message
 from tgbot.data.config import webhook_url
 from tgbot.data.loader import bot, storage, Session
 from tgbot.handlers import traders_handler, admin_handler, forward_handler
+from tgbot.handlers.forward_handler import client
 from tgbot.middlewares.database_middleware import DatabaseMiddleware
 import tgbot.handlers.main_menu as main_menu
 import platform
@@ -21,7 +22,6 @@ import platform
 from tgbot.services.database import Trader, Trade
 from sqlalchemy.orm import session
 
-from ub_test import client
 
 if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
