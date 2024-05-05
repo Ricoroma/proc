@@ -21,15 +21,13 @@ import platform
 from tgbot.services.database import Trader, Trade
 from sqlalchemy.orm import session
 
+from ub_test import client
+
 if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 dp = Dispatcher(storage=storage)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-
-api_id = 27378538
-api_hash = '99ebeab789ef9c139fe233b32f436abb'
-client = Client('s1', api_id, api_hash)
 
 
 @client.on_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)

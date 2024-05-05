@@ -4,6 +4,7 @@ from aiogram import Router, F
 from aiogram.enums import ContentType
 from aiogram.utils.formatting import Text
 from aiogram.filters import Command
+from pyrogram import Client
 from sqlalchemy.orm import Session
 
 from tgbot.data import loader
@@ -17,9 +18,38 @@ from tgbot.filters.is_adm import IsAdmin
 from tgbot.utils.curs import get_course
 from tgbot.utils.other import format_trades
 from tgbot.utils.states import TraderState, AdminState
-from main import client
+
+api_id = 27378538
+api_hash = '99ebeab789ef9c139fe233b32f436abb'
+client = Client('s1', api_id, api_hash)
 
 router = Router()
+
+
+@client.on_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
+async def f(c: Client, m: Message):
+    if m.reply_markup:
+        if isinstance(m.reply_markup, types.InlineKeyboardMarkup):
+            keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
+            await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
+            return
+        await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
+        return
+
+    await bot.send_message(c.me.id, m.text)
+
+
+@client.on_edited_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
+async def f(c, m: Message):
+    if m.reply_markup:
+        if isinstance(m.reply_markup, types.InlineKeyboardMarkup):
+            keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
+            await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
+            return
+        await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
+        return
+
+    await bot.send_message(c.me.id, m.text)
 
 
 @router.message()
