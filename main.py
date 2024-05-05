@@ -22,38 +22,11 @@ import platform
 from tgbot.services.database import Trader, Trade
 from sqlalchemy.orm import session
 
-
 if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 dp = Dispatcher(storage=storage)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-
-
-@client.on_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
-async def f(c: Client, m: Message):
-    if m.reply_markup:
-        if isinstance(m.reply_markup, types.InlineKeyboardMarkup):
-            keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
-            await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
-            return
-        await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
-        return
-
-    await bot.send_message(c.me.id, m.text)
-
-
-@client.on_edited_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
-async def f(c, m: Message):
-    if m.reply_markup:
-        if isinstance(m.reply_markup, types.InlineKeyboardMarkup):
-            keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
-            await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
-            return
-        await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
-        return
-
-    await bot.send_message(c.me.id, m.text)
 
 
 @asynccontextmanager
