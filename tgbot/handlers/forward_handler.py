@@ -4,7 +4,7 @@ from aiogram import Router, F
 from aiogram.enums import ContentType
 from aiogram.utils.formatting import Text
 from aiogram.filters import Command
-from pyrogram import Client
+from pyrogram import Client, filters, types
 from sqlalchemy.orm import Session
 
 from tgbot.data import loader
