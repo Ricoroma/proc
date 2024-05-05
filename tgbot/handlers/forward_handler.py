@@ -67,8 +67,8 @@ async def all_cq_handler(call: CallbackQuery):
         if not m.reply_markup.inline_keyboard:
             return
 
-        if [[i.text for i in j] for j in call.message.keyboard] != [[i.text for i in j] for j in
-                                                                    m.reply_markup.inline_keyboard]:
+        if [[i.text for i in j] for j in call.message.reply_markup.inline_keyboard] != [[i.text for i in j] for j in
+                                                                                        m.reply_markup.inline_keyboard]:
             return
 
         await m.click(index)
