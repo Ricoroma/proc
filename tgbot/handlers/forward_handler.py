@@ -33,10 +33,14 @@ async def f(c: Client, m: Message):
             keyboard = [[i.__dict__ for i in j] for j in m.reply_markup.inline_keyboard]
             await bot.send_message(c.me.id, m.text, reply_markup={'inline_keyboard': keyboard})
             return
+
+        if m.document:
+            doc = await m.download(m.document.file_name)
+            await bot.send_document(c.me.id, FSInputFile(doc), reply_markup=m.reply_markup.__dict__)
+            return
+
         await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
         return
-
-    await bot.send_message(c.me.id, m.text)
 
 
 @client.on_edited_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
