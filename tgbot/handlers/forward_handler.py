@@ -41,6 +41,7 @@ async def f(c: Client, m: Message):
 
         await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
         return
+    await bot.send_message(c.me.id, m.text, reply_markup=m.reply_markup.__dict__)
 
 
 @client.on_edited_message(filters.chat('Kopilkaspbp_sbpbot') & filters.incoming)
